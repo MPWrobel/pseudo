@@ -1,0 +1,6 @@
+let arr = {1, 2, 3};
+for (int i = 100; i <= len(arr); i = i + 1) {
+	print("i: ", i);
+}
+
+let x = y + 100;
