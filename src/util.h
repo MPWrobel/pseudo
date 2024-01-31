@@ -5,7 +5,11 @@
 
 #define len(a) (sizeof(a) / sizeof(a[0]))
 
-long filesize(FILE *file);
-char * readfile(FILE *file);
+long  GetFileSize(FILE *file);
+char *ReadFile(FILE *file);
+
+void Print(char *, ...);
+void BeginIndent();
+void EndIndent();
 
 #endif

@@ -1,9 +1,14 @@
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "util.h"
 
+static int indent;
+
 long
-filesize(FILE *file)
+GetFileSize(FILE *file)
 {
 	long pos, size;
 
@@ -16,16 +21,38 @@ filesize(FILE *file)
 }
 
 char *
-readfile(FILE *file)
+ReadFile(FILE *file)
 {
 	char *buf;
 	long  size;
 
-	size = filesize(file);
+	size = GetFileSize(file);
 	buf = malloc(size + 1);
 	buf[size] = '\0';
 	fread(buf, 1, size, file);
 	fclose(file);
 
 	return buf;
+}
+
+void
+BeginIndent()
+{
+	indent++;
+}
+
+void
+EndIndent()
+{
+	indent--;
+}
+
+void Print(char *string, ...) {
+	char buf[64];
+	snprintf(buf, sizeof(buf), "%*s%s\n", indent * 2, "", string);
+
+	va_list args;
+	va_start(args, string);
+	vprintf(buf, args);
+	va_end(args);
 }

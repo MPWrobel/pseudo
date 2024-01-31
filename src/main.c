@@ -6,6 +6,7 @@
 #include "stb_ds.h"
 
 #include "lex.h"
+#include "parse.h"
 #include "util.h"
 
 void LaunchREPL();
@@ -26,15 +27,14 @@ LaunchREPL()
 	for (;;) {
 		line = readline("> ");
 		if (!line) break;
-		Lexer *lexer = CreateLexer(line);
 
-		Token *tokens = Lex(lexer);
-		int i;
-		for (i = 0; i < arrlen(tokens); i++) PrintToken(tokens[i]);
-		while (arrlen(tokens)) DestroyToken(arrpop(tokens));
-		arrfree(tokens);
+		Lexer  *lexer  = CreateLexer(line);
+
+		Token *token;
+		while((token = NextToken(lexer))->type) PrintToken(token);
 
 		DestroyLexer(lexer);
+
 		free(line);
 	}
 }
@@ -42,8 +42,8 @@ LaunchREPL()
 void
 RunFile(char *script, char **argv)
 {
-	FILE  *file;
-	char  *buf;
+	FILE *file;
+	char *buf;
 
 	file = fopen(script, "r");
 	if (!file) {
@@ -51,15 +51,14 @@ RunFile(char *script, char **argv)
 		return;
 	}
 
-	buf = readfile(file);
-	Lexer *lexer = CreateLexer(buf);
+	buf = ReadFile(file);
 
-	Token *tokens = Lex(lexer);
-	int i;
-	for (i = 0; i < arrlen(tokens); i++) PrintToken(tokens[i]);
-	while (arrlen(tokens)) DestroyToken(arrpop(tokens));
-	arrfree(tokens);
+	Lexer  *lexer  = CreateLexer(buf);
+
+	Token *token;
+	while((token = NextToken(lexer))->type) PrintToken(token);
 
 	DestroyLexer(lexer);
+
 	free(buf);
 }

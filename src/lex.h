@@ -1,9 +1,12 @@
 #ifndef lex_h
 #define lex_h
 
+#include "arena.h"
+
 /* clang-format off */
 typedef enum {
 	TOK_EOF,
+	TOK_COMMENT,
 	/* DELIMITERS */
 	/* Pairs */
 	TOK_L_PAREN, TOK_R_PAREN,
@@ -46,24 +49,21 @@ typedef struct {
 } Symbol;
 
 typedef struct {
-	char   *input;
-	Token  *output;
-	Symbol *symbols;
-	char    current;
-	char    peek;
-	int     position;
-	int     row;
-	int     column;
+	char        *input;
+	MemoryBlock *arena;
+	char         current;
+	char         peek;
+	int          position;
+	int          row;
+	int          column;
 } Lexer;
 
 Lexer *CreateLexer(char *);
 void   DestroyLexer(Lexer *);
-Token *Lex(Lexer *);
-Token  NextToken(Lexer *);
+Token *NextToken(Lexer *);
 void   ReadChar(Lexer *);
 
-Token CreateToken(TokenType, char *);
-void  DestroyToken(Token);
-void  PrintToken(Token);
+TokenType GetTokenType(char *string);
+void      PrintToken(Token *);
 
 #endif /* !lex_h */
