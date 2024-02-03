@@ -7,7 +7,7 @@
 
 #include "lex.h"
 #include "parse.h"
-#include "util.h"
+#include "utils.h"
 
 void LaunchREPL();
 void RunFile(char *, char **);
@@ -29,10 +29,11 @@ LaunchREPL()
 		if (!line) break;
 
 		Lexer  *lexer  = CreateLexer(line);
+		Parser *parser = CreateParser(lexer);
 
-		Token *token;
-		while((token = NextToken(lexer))->type) PrintToken(token);
+		Statement *program = Parse(parser);
 
+		DestroyParser(parser);
 		DestroyLexer(lexer);
 
 		free(line);
@@ -54,10 +55,11 @@ RunFile(char *script, char **argv)
 	buf = ReadFile(file);
 
 	Lexer  *lexer  = CreateLexer(buf);
+	Parser *parser = CreateParser(lexer);
 
-	Token *token;
-	while((token = NextToken(lexer))->type) PrintToken(token);
+	Statement *program = Parse(parser);
 
+	DestroyParser(parser);
 	DestroyLexer(lexer);
 
 	free(buf);

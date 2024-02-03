@@ -34,7 +34,7 @@ typedef enum {
 	/* IDENTIFIERS */
 	TOK_IDENTIFIER,
 	/* LITERALS */
-	TOK_STRING, TOK_NUMBER,
+	TOK_STRING, TOK_INTEGER,
 } TokenType;
 /* clang-format on */
 
@@ -64,6 +64,7 @@ Token *NextToken(Lexer *);
 void   ReadChar(Lexer *);
 
 TokenType GetTokenType(char *string);
+char * TokenString(Token *token);
 void      PrintToken(Token *);
 
 #endif /* !lex_h */

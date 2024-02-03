@@ -1,6 +1,4 @@
-let arr = {1, 2, 3};
-for (int i = 100; i <= len(arr); i = i + 1) {
-	print("i: ", i);
-}
-
-let x = y + 100;
+let msg =  "hello, world!";
+let x = -100;
+return 10 + 20 * 30 + -40;
+# let arr = {1, 2, 3};

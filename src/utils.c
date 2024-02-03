@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "util.h"
+#include "utils.h"
 
 static int indent;
 
@@ -26,8 +26,8 @@ ReadFile(FILE *file)
 	char *buf;
 	long  size;
 
-	size = GetFileSize(file);
-	buf = malloc(size + 1);
+	size      = GetFileSize(file);
+	buf       = malloc(size + 1);
 	buf[size] = '\0';
 	fread(buf, 1, size, file);
 	fclose(file);
@@ -47,7 +47,9 @@ EndIndent()
 	indent--;
 }
 
-void Print(char *string, ...) {
+void
+Print(char *string, ...)
+{
 	char buf[64];
 	snprintf(buf, sizeof(buf), "%*s%s\n", indent * 2, "", string);
 
