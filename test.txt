@@ -1,4 +1,5 @@
-let msg =  "hello, world!";
-let x = -100;
-return 10 + 20 * 30 + -40;
-# let arr = {1, 2, 3};
+proc calc(x, y) { 
+	return (x + y) * (x + y);
+}
+
+let z = calc(2, 3);

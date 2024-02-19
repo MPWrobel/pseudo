@@ -5,6 +5,7 @@
 #define STB_DS_IMPLEMENTATION
 #include "stb_ds.h"
 
+#include "eval.h"
 #include "lex.h"
 #include "parse.h"
 #include "utils.h"
@@ -32,7 +33,11 @@ LaunchREPL()
 		Parser *parser = CreateParser(lexer);
 
 		Statement *program = Parse(parser);
+		Evaluator *evaluator = CreateEvaluator(program);
 
+		Eval(evaluator, program);
+
+		DestroyEvaluator(evaluator);
 		DestroyParser(parser);
 		DestroyLexer(lexer);
 
@@ -58,7 +63,11 @@ RunFile(char *script, char **argv)
 	Parser *parser = CreateParser(lexer);
 
 	Statement *program = Parse(parser);
+	Evaluator *evaluator = CreateEvaluator(program);
 
+	Eval(evaluator, program);
+
+	DestroyEvaluator(evaluator);
 	DestroyParser(parser);
 	DestroyLexer(lexer);
 
