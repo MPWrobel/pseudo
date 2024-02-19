@@ -47,7 +47,7 @@ char *TokenNames[] = {
 	[TOK_INTEGER]    = "INTEGER",
 };
 
-TokenType
+static TokenType
 GetTokenType(char *string)
 {
 	switch (string[0]) {
@@ -132,7 +132,7 @@ DestroyLexer(Lexer *lexer)
 	DestroyArena(lexer->arena);
 }
 
-void
+static void
 ReadChar(Lexer *lexer)
 {
 	lexer->column++;
@@ -147,8 +147,6 @@ NextToken(Lexer *lexer)
 	Token *token = ArenaAlloc(lexer->arena, sizeof(Token));
 	char  *word  = NULL;
 
-	*token = (Token){0};
-
 	while (isspace(lexer->current)) {
 		if (lexer->current == '\n' || lexer->current == '\r') {
 			lexer->column = 1;
@@ -156,6 +154,8 @@ NextToken(Lexer *lexer)
 		}
 		ReadChar(lexer);
 	}
+
+	*token = (Token){.row = lexer->row, .column = lexer->column};
 
 	if (lexer->current == '\0') {
 		arrpush(word, 'E');
@@ -250,14 +250,4 @@ TokenString(Token *token)
 		snprintf(string, sizeof(string), "%s(%s)", TokenNames[token->type], token->value);
 	}
 	return string;
-}
-
-void
-PrintToken(Token *token)
-{
-	if (token->type == TOK_STRING) {
-		Print("%s(\"%s\")", TokenNames[token->type], token->value);
-	} else {
-		Print("%s(%s)", TokenNames[token->type], token->value);
-	}
 }

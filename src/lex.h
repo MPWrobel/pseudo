@@ -41,6 +41,8 @@ typedef enum {
 typedef struct {
 	TokenType type;
 	char     *value;
+	int       row;
+	int       column;
 } Token;
 
 typedef struct {
@@ -61,10 +63,7 @@ typedef struct {
 Lexer *CreateLexer(char *);
 void   DestroyLexer(Lexer *);
 Token *NextToken(Lexer *);
-void   ReadChar(Lexer *);
 
-TokenType GetTokenType(char *string);
-char * TokenString(Token *token);
-void      PrintToken(Token *);
+char *TokenString(Token *);
 
 #endif /* !lex_h */

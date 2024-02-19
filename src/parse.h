@@ -23,25 +23,44 @@ typedef struct {
 } Parser;
 
 typedef struct {
+	Token              *procedure;
+	char                arity;
+	struct Expression **arguments;
+} CallExpression;
+
+typedef struct {
+	Token *value;
+} IdentifierExpression;
+
+typedef struct {
 	Token *value;
 } LiteralExpression;
 
 typedef struct {
-	Token *operator;
+	Token             *operator;
 	struct Expression *value;
 } PrefixExpression;
 
 typedef struct {
-	Token *operator;
+	Token             *operator;
 	struct Expression *value1, *value2;
 } InfixExpression;
 
 typedef struct Expression {
-	enum { EXPR_INVALID, EXPR_LITERAL, EXPR_INFIX, EXPR_PREFIX } type;
+	enum {
+		EXPR_INVALID,
+		EXPR_CALL,
+		EXPR_IDENTIFIER,
+		EXPR_LITERAL,
+		EXPR_INFIX,
+		EXPR_PREFIX
+	} type;
 	union {
-		LiteralExpression literal;
-		PrefixExpression  prefix;
-		InfixExpression   infix;
+		CallExpression       call;
+		IdentifierExpression identifier;
+		LiteralExpression    literal;
+		PrefixExpression     prefix;
+		InfixExpression      infix;
 	};
 } Expression;
 
@@ -51,6 +70,7 @@ typedef struct ExpressionStatement {
 
 typedef struct BlockStatement {
 	Token            *start;
+	int               count;
 	struct Statement *statements;
 } BlockStatement;
 
@@ -65,9 +85,10 @@ typedef struct ReturnStatement {
 } ReturnStatement;
 
 typedef struct ProcStatement {
-	Token         *identifier;
-	Token         *arguments;
-	BlockStatement body;
+	Token          *identifier;
+	char            arity;
+	Token         **arguments;
+	BlockStatement *body;
 } ProcStatement;
 
 typedef struct Statement {
@@ -85,23 +106,25 @@ typedef struct Statement {
 		LetStatement        let;
 		ReturnStatement     return_;
 		BlockStatement      block;
-	} statement;
+	};
 } Statement;
 
 Parser *CreateParser(Lexer *);
 void    DestroyParser(Parser *);
 
 void ReadToken(Parser *);
-bool ExpectToken(Parser *, TokenType);
+void ExpectToken(Parser *, TokenType);
 
 void PrintStatement(Statement *);
 void PrintExpression(Expression *);
 
-Statement *Parse(Parser *);
-Statement  ParseStatement(Parser *parser);
-Statement  ParseExpressionStatement(Parser *);
-Statement  ParseLetStatement(Parser *);
-Statement  ParseReturnStatement(Parser *);
+Statement     *Parse(Parser *);
+Statement      ParseStatement(Parser *);
+Statement      ParseExpressionStatement(Parser *);
+Statement      ParseLetStatement(Parser *);
+Statement      ParseReturnStatement(Parser *);
+Statement      ParseProcStatement(Parser *);
+BlockStatement ParseBlockStatement(Parser *);
 
 typedef Expression ExpressionParser(Parser *);
 
