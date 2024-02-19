@@ -3,8 +3,8 @@
 
 typedef struct MemoryBlock {
 	int                 free;
-	struct MemoryBlock *next;
-	char                block[1024];
+	// struct MemoryBlock *next;
+	char               *block/*[1024]*/;
 } MemoryBlock;
 
 MemoryBlock *CreateArena();
